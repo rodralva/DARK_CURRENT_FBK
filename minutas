@@ -1,0 +1,11 @@
+Datos Corriente oscura:
+
+-Calibracion  con laser en Binario
+-Corriente oscura en .txt ascii
+
+-3 OV: 3.5, 4.5 y 7 V de OV
+
+337 calibracion: 3.5 OV con ventana de 50 micros
+el resto a 10
+
+Corriente oscura a 50 micros
