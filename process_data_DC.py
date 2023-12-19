@@ -17,7 +17,7 @@ args = parser.parse_args()
 DEBUG =False
 
 file_list = glob.glob('data/FBK_Preproduccion/337/SET1/DC/C2--OV7--00**')
-
+file_list = glob.glob(args.file)
 
 # %%
 #try reading the first file
@@ -129,8 +129,7 @@ for f_path in file_list:
 DELTA_TIMES = np.array(ak.flatten(ak.Array(DELTA_TIMES)))
 PEAK_VALUES = np.array(ak.flatten(ak.Array(PEAK_VALUES)))
 
-# %%
-
+plt.figure()
 plt.plot(DELTA_TIMES,PEAK_VALUES,'.',markersize=1)
 plt.semilogx()
 plt.xlim(1e-6,20)
@@ -138,14 +137,14 @@ plt.ylim(0,0.0050)
 
 plt.ylabel('Amplitude [mV]')
 plt.xlabel('$\Delta T$ [s]')
-
+plt.savefig('images/DELTA_TIMES_vs_PEAK_VALUES.png',dpi=300)
+plt.show()
 plt.figure()
 bins=np.logspace(-6,1,100)
 
 plt.hist(DELTA_TIMES,bins=bins,histtype='step',log=True);
 plt.semilogx()
-
-# %%
-
+plt.savefig('images/DELTA_TIMES.png',dpi=300)
+plt.show()
 
 
