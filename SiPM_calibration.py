@@ -1,3 +1,4 @@
+print("--------------------")
 # %%
 import numpy as np
 import matplotlib.pyplot as plt
@@ -222,7 +223,7 @@ gain_absolute=Q_out(gain_ADCs_x_ticks,period)/e_charge/1e6/Amplification
 gain_absolute_error=gain_absolute*error_relative
 
 
-file_path = 'calibrations.csv'  # Replace with the actual file path
+file_path = 'calibrations.csv'  
 
 if os.path.exists(file_path):
     df = pd.read_csv(file_path)

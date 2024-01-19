@@ -1,3 +1,4 @@
+print("--------------------")
 # %%
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,8 +18,7 @@ import glob
 
 
 parser = argparse.ArgumentParser(description="Purpose: Small program designed to read the SPE files and get the gain of each, adapted for Antonio Verdugo's data taking of FBK SiPMs with an oscilloscope. \n Designer: Rodrigo Alvarez Garrote")    
-# parser.add_argument('--debug', action='store_true',
-#                     help='debug mode')
+
 parser.add_argument('--OV', type=int, default=7,
                     help='Overvoltage')
 # parser.add_argument('--path', type=str, default="/media/rodrigoa/Andresito/FBK_Preproduccion/247/SET2/SPE/C2--OV",
@@ -44,6 +44,9 @@ le_path=args.path+str(args.N)+"/"+args.set+"/DC/C"+str(args.ch)+"--OV"+str(args.
 file_list = glob.glob(le_path)
 print('Reading files in :'+le_path+'...')
 print('Found {} files'.format(len(file_list)))
+if len(file_list)==0:
+    print("No files found, exiting...")
+    exit()
 print('First 3 files names:')
 print(file_list[:3])
 
@@ -63,8 +66,7 @@ def DC_get_times_file(file_path):
             words = line.split(',')
             last_word = words[-1]
             decimal_numbers.append(float(last_word))
-    # if DEBUG:
-    #     print(decimal_numbers)
+
     windows_times = np.array(decimal_numbers)
     windows_times += PRETRIGGER;
     return np.array(windows_times)
@@ -88,7 +90,7 @@ def DC_read_file(file_path,polarity=1):
 import scipy.signal as signal
 from scipy.ndimage import gaussian_filter1d
 
-def smooth_and_find_peaks(ADCs,period, threshold=0.01, PED_RANGE=50):
+def smooth_and_find_peaks(ADCs,period, threshold=0.005, PED_RANGE=50):
     # FILTERING
     smoothed_ADCs = gaussian_filter1d(ADCs, sigma=4, mode='reflect', axis=1)
     
@@ -105,15 +107,13 @@ def smooth_and_find_peaks(ADCs,period, threshold=0.01, PED_RANGE=50):
 
     return peaks, peak_values, smoothed_ADCs
 
-DEBUG=False
-
 if DEBUG:
     times, ADCs,period=DC_read_file(file1_path)
     peaks,  peak_values, smoothed_ADCs = smooth_and_find_peaks(ADCs,period=period)
     plt.hist(np.max(smoothed_ADCs,axis=1),bins=100);
 
+    plt.figure()
     for i in range(10):
-        plt.figure()
         plt.plot(np.arange(len(smoothed_ADCs[i]))*period,smoothed_ADCs[i])
         plt.plot(peaks[i], peak_values[i], "x")
 
@@ -159,6 +159,10 @@ PEAK_VALUES = np.array(ak.flatten(ak.Array(PEAK_VALUES)))
 
 # %%
 
+plot_path="plots/"+str(args.N)+"_"+args.set+"/"
+os.system("mkdir -p "+plot_path)
+
+plt.figure()
 plt.plot(DELTA_TIMES,PEAK_VALUES,'.',markersize=1)
 plt.semilogx()
 plt.xlim(1e-6,20)
@@ -167,10 +171,28 @@ plt.ylim(0,0.1)
 plt.ylabel('Amplitude [mV]')
 plt.xlabel('$\Delta T$ [s]')
 
+plt.savefig(plot_path+"DC_Amp_vs_DeltaT_"+str(args.OV)+"_"+str(args.ch)+".png",dpi=300)
 plt.figure()
 bins=np.logspace(-6,1,100)
 
 plt.hist(DELTA_TIMES,bins=bins,histtype='step',log=True);
 plt.semilogx()
+plt.ylabel('Amplitude [mV]')
+plt.xlabel('$\Delta T$ [s]')
+plt.savefig(plot_path+"DC_DeltaT_hist_"+str(args.OV)+"_"+str(args.ch)+".png",dpi=300)
 
+print("Saved plot in "+plot_path)
 if DEBUG:plt.show()
+
+
+#save the data for later fits, avoid reprocessing
+data={'DeltaT':DELTA_TIMES,'Amplitude':PEAK_VALUES}
+df=pd.DataFrame(data=data)
+data_path="data/"+str(args.N)+"_"+args.set+"/"
+print("Saving data in "+data_path)
+os.system("mkdir -p "+data_path)
+file_name=data_path+"DC_data_"+str(args.OV)+"_"+str(args.ch)+".csv"
+df.to_csv(file_name,index=False)
+# df.to_csv("test.csv",index=False)
+print(df)
+print("Done!")
