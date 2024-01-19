@@ -37,7 +37,7 @@ axes.titlesize: 36
 # axes.prop_cycle: cycler('color', ['000000', 'D55E00', '56B4E9', 'E69F00', '009E73', 'CC79A7', '0072B2', 'F0E442',])
 
 # Lan's Colors
-axes.prop_cycle: cycler("color", ["#E7004C", "#FF9664","#005A8F","#00BBCC","#00CE7C","#3BD4AE","#A1DED2","#8B6969","#DAA8E2",])
+# axes.prop_cycle: cycler("color", ["#E7004C", "#FF9664","#005A8F","#00BBCC","#00CE7C","#3BD4AE","#A1DED2","#8B6969","#DAA8E2",])
 
 # Okabe-Ito variant #2
 # This one swaps the two blues so the darker one comes first.

@@ -9,3 +9,6 @@ Datos Corriente oscura:
 el resto a 10
 
 Corriente oscura a 50 micros
+
+Ojo!, 
+- checkear por si acaso el tamaño de la ventana y el sampleo. Lo que si es cierto es que las tomas de corriente oscura(DC) se almacenan en 50 segmentos cada archivo. 
