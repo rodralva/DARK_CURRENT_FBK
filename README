@@ -5,10 +5,17 @@ Datos Corriente oscura:
 
 -3 OV: 3.5, 4.5 y 7 V de OV
 
-337 calibracion: 3.5 OV con ventana de 50 micros
-el resto a 10
+337 calibracion: 3.5 OV con ventana de 10 micros
 
-Corriente oscura a 50 micros
+Corriente oscura a 100 micros
+
+
+-Calibracion del Amplificador inyectando una señal con un condensador conocido para varios voltajes: 200,300,400,500 y 600 mV.
+-Para el calculo de la ganancia se ha asumido un valor de amplification=498.198 correspondiente a la señal/pulso con la carga más parecida al SPE
+
 
 Ojo!, 
+
 - checkear por si acaso el tamaño de la ventana y el sampleo. Lo que si es cierto es que las tomas de corriente oscura(DC) se almacenan en 50 segmentos cada archivo. 
+
+- Se ha observado que el factor de Ganancia del amplificador no es proporcional a la corriente que se le ponia al condensador, esto es, NO ES LINEAL. Los valores más altos para 200mV eran de hasta x540, mientras que el más bajo, para 600mV, de 400. 
